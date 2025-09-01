@@ -8,7 +8,7 @@ Este proyecto sirve como base para cualquier aplicación web que requiera autent
 
 Tecnologías utilizadas
 
-Frontend: React, React Router, CSS modular por componente.
+####Frontend: https://github.com/FelipeHM5/ApiLogin-Example/blob/main/frontend/public/logo192.png
 
 Backend: Node.js, Express.
 
