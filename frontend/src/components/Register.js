@@ -18,9 +18,11 @@ export default function Register() {
         e.preventDefault();
         const data = await registerUser(form);
         setMsg(data.error || data.message); 
-        if (data.msg === 'Usuario registrado exitosamente') {
-            setMsg('¡Registro exitoso! Redirigiendo al login...');
+        if (data.msg === 'User registered successfully') {
+            setMsg('Registration successful! Redirecting to login...');
             setTimeout(() => navigate('/login'), 1500);
+        } else {
+            setMsg(data.msg || 'Registration failed');
         }
         
     };
