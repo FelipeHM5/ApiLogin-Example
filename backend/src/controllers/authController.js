@@ -58,3 +58,50 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor' });
     }
 };
+
+// Obtener perfil de usuario
+exports.getProfile = async (req, res) => {
+    try {
+        const users = await User.find().select('-password'); // Excluir la contraseña
+
+
+        if (!users || User.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron usuarios' });
+        }
+
+        res.status(200).json(users);
+    }  catch (error) {
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
+    }
+};
+
+exports.editProfile = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const newData = {};
+
+        if (name) newData.name = name;
+        if (email) newData.email = email;
+        if (password) {
+            const bcrypt = require('bcryptjs');
+            newData.password = await bcrypt.hash(password, 10);
+        }
+
+        const user = await User.findByIdAndUpdate(req.params.id, newData, { new: true }).select('-password');
+        
+        res.json({ msg: 'Perfil actualizado', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar usuario', error: error.message });
+    }
+};
+
+exports.deleteProfile = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+        res.json({ msg: 'Usuario eliminado' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar usuario', error: error.message });
+    }
+};
+
